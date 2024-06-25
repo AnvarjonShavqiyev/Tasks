@@ -1,2 +1,3 @@
-my-app
+my-app/
 my-nest-project/node_modules/
+.vscode/
