@@ -5,9 +5,11 @@ export declare class UserController {
     constructor(userRepository: Repository<User>);
     findAllUsers(): Promise<User[]>;
     findUserById(id: any): Promise<User>;
+    findUserByEmail(email: string): Promise<User>;
     createUser(user: User): Promise<User>;
     updateUser(id: any, user: User): Promise<User>;
     deleteUser(id: string): Promise<{
+        id: string;
         message: string;
     }>;
 }

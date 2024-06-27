@@ -18,14 +18,22 @@ export class UserController {
     @Get(':id')
     async findUserById(@Param('id') id: any): Promise<User> {
         const user = await this.userRepository.findOne({ where: { id } });
-
         if (!user) {
             throw new NotFoundException(`User with ID ${id} not found`);
         }
-
         return user;
     }
 
+    @Get('getByEmail/:email')
+    async findUserByEmail(@Param('email') email: string): Promise<User> {
+        const user = await this.userRepository.findOne({ where: { email } });
+        if (!user) {
+            throw new NotFoundException(`User with email ${email} not found`);
+        }
+        return user;
+    }
+    
+    
     @Post()
     async createUser(@Body() user: User): Promise<User> {
         try {
@@ -52,7 +60,7 @@ export class UserController {
     }
 
     @Delete(':id')
-    async deleteUser(@Param('id') id: string): Promise<{ message: string }> {
+    async deleteUser(@Param('id') id: string): Promise<{id:string, message: string }> {
         try {
             const deleteResult: DeleteResult = await this.userRepository.delete(id);
 
@@ -60,7 +68,7 @@ export class UserController {
                 throw new NotFoundException(`User with ID ${id} not found`);
             }
 
-            return { message: 'Deleted!' };
+            return { id, message: 'Deleted!' };
         } catch (error) {
             throw new BadRequestException('Failed to delete user');
         }

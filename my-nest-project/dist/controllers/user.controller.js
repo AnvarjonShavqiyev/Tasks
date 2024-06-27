@@ -31,6 +31,13 @@ let UserController = class UserController {
         }
         return user;
     }
+    async findUserByEmail(email) {
+        const user = await this.userRepository.findOne({ where: { email } });
+        if (!user) {
+            throw new common_1.NotFoundException(`User with email ${email} not found`);
+        }
+        return user;
+    }
     async createUser(user) {
         try {
             const newUser = await this.userRepository.save(user);
@@ -58,7 +65,7 @@ let UserController = class UserController {
             if (deleteResult.affected === 0) {
                 throw new common_1.NotFoundException(`User with ID ${id} not found`);
             }
-            return { message: 'Deleted!' };
+            return { id, message: 'Deleted!' };
         }
         catch (error) {
             throw new common_1.BadRequestException('Failed to delete user');
@@ -79,6 +86,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "findUserById", null);
+__decorate([
+    (0, common_1.Get)('getByEmail/:email'),
+    __param(0, (0, common_1.Param)('email')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "findUserByEmail", null);
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
