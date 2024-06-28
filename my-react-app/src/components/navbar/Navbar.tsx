@@ -13,7 +13,7 @@ const Navbar = () => {
     <div className='navbar__wrapper'>
         <Container>
           <div className='navbar'>
-            <h2>User managemant</h2>
+            <h2>User management</h2>
             <button className='logout-btn' onClick={onLogOut}>Log Out</button>
           </div>
         </Container>
