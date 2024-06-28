@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, InputNumber, Popconfirm, Table, Typography, Button, TableProps } from 'antd';
+import { Form, Popconfirm, Table, Typography, Button, TableProps } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store/Store';
 import { deleteUser, getAllUsers, updateUser } from '../../redux/features/UsersSlice';
 import { Container } from '../../utils/Utils';
 import { DeleteFilled, EditFilled } from '@ant-design/icons';
 import './UserTable.scss';
+import { EditableCell } from '../editableCell/EditableCell';
 
 interface User {
   id: string;
@@ -13,49 +14,6 @@ interface User {
   email: string;
   password: string;
 }
-
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
-  dataIndex: string;
-  title: any;
-  inputType: 'number' | 'text';
-  record: User;
-  index: number;
-}
-
-const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{ margin: 0 }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
 
 const UserTable: React.FC = () => {
   const [form] = Form.useForm();
@@ -70,7 +28,7 @@ const UserTable: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    setData(users); // Update local state 'data' when 'users' changes
+    setData(users);
   }, [users]);
 
   const edit = (record: Partial<User> & { id: React.Key }) => {
@@ -110,7 +68,6 @@ const UserTable: React.FC = () => {
   const deleteUsers = async(id: string) => {
     try{
       await dispatch(deleteUser({ id }));
-      // Update 'data' state after successful deletion
       setData(data.filter((user:User) => user.id !== id));
     }catch(error){
       console.log(error)
