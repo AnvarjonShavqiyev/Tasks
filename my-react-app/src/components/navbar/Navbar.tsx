@@ -1,11 +1,12 @@
 import { useDispatch } from 'react-redux'
 import { Container } from '../../utils/Utils'
-import './Navbar.scss'
 import { AppDispatch } from '../../redux/store/Store'
 import { logOut } from '../../redux/features/AuthSlice'
+import './Navbar.scss'
+
 const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const doLogOut = () => {
+  const onLogOut = () => {
     dispatch(logOut())
   }
   return (
@@ -13,7 +14,7 @@ const Navbar = () => {
         <Container>
           <div className='navbar'>
             <h2>User managemant</h2>
-            <button className='logout-btn' onClick={doLogOut}>Log Out</button>
+            <button className='logout-btn' onClick={onLogOut}>Log Out</button>
           </div>
         </Container>
     </div>
