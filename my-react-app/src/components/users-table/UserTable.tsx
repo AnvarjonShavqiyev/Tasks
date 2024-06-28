@@ -70,7 +70,7 @@ const UserTable: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    setData(users); // Update local state 'data' when 'users' changes
+    setData(users); 
   }, [users]);
 
   const edit = (record: Partial<User> & { id: React.Key }) => {
@@ -110,7 +110,6 @@ const UserTable: React.FC = () => {
   const deleteUsers = async(id: string) => {
     try{
       await dispatch(deleteUser({ id }));
-      // Update 'data' state after successful deletion
       setData(data.filter((user:User) => user.id !== id));
     }catch(error){
       console.log(error)
