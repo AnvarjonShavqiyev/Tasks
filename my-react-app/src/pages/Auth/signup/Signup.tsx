@@ -1,4 +1,3 @@
-
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, MailOutlined, LockOutlined } from '@ant-design/icons';
 import { User } from '../../../types';
@@ -7,16 +6,25 @@ import { AppDispatch } from '../../../redux/store/Store';
 import { createUser } from '../../../redux/features/AuthSlice';
 
 const Signup = () => {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
+
   const onFinish = (value: User) => {
     const { name, email, password } = value;
     const newUser = { name, email, password };
-    dispatch(createUser({newUser}))
+    dispatch(createUser({ newUser }));
   };
-  
+
+  const validateRetypePassword = ({ getFieldValue }: any) => ({
+    validator(_: any, value: string) {
+      if (!value || getFieldValue('password') === value) {
+        return Promise.resolve();
+      }
+      return Promise.reject(new Error('The two passwords do not match!'));
+    },
+  });
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop:"40px", width:"100%"}}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: "40px", width: "100%" }}>
       <Form
         name="registration"
         initialValues={{ remember: true }}
@@ -51,14 +59,7 @@ const Signup = () => {
           hasFeedback
           rules={[
             { required: true, message: 'Please retype your Password!' },
-            ({ getFieldValue }) => ({
-              validator(_, value) {
-                if (!value || getFieldValue('password') === value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(new Error('The two passwords do not match!'));
-              },
-            }),
+            validateRetypePassword,
           ]}
         >
           <Input
