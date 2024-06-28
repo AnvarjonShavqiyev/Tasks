@@ -5,6 +5,7 @@ import { AppDispatch, RootState } from '../../redux/store/Store';
 import { deleteUser, getAllUsers, updateUser } from '../../redux/features/UsersSlice';
 import { Container } from '../../utils/Utils';
 import { DeleteFilled, EditFilled } from '@ant-design/icons';
+import { EditableCell } from '../editableCell/EditableCell';
 import './UserTable.scss';
 
 interface User {
@@ -13,49 +14,6 @@ interface User {
   email: string;
   password: string;
 }
-
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
-  dataIndex: string;
-  title: any;
-  inputType: 'number' | 'text';
-  record: User;
-  index: number;
-}
-
-const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{ margin: 0 }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
 
 const UserTable: React.FC = () => {
   const [form] = Form.useForm();
