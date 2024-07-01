@@ -1,19 +1,28 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entites/user.entity';
-import { UserController } from './controllers/user.controller';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UserModule } from './users/user.module';
+import { AuthModule } from './auth/auth.module';
+import { User } from './users/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: "postgres://default:ZnU1ztG6ocdg@ep-white-snow-a47lu56s-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require",
-      ssl: { rejectUnauthorized: false }, 
-      entities: [User],
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        type: 'postgres',
+        url: configService.get<string>('DATABASE_URL'),
+        ssl: { rejectUnauthorized: false },
+        entities: [User],
+        synchronize: true,
+      }),
+      inject: [ConfigService],
+    }),
+    UserModule,
+    AuthModule,
   ],
-  controllers: [UserController],
 })
 export class AppModule {}
