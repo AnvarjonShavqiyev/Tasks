@@ -14,7 +14,6 @@ export class UsersController {
     return this.userService.create(createUserDto);
   }
 
-  
   @Get()
   async getAllUsers(): Promise<User[]> {
     return this.userService.findAll();
