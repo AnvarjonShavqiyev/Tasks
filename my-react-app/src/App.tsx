@@ -1,11 +1,10 @@
 import React from 'react';
-import './App.css';
 
+import './App.css';
+import RouteController from './router/index'
 function App() {
   return (
-    <div>
-    
-    </div>
+    <RouteController/>
   );
 }
 
