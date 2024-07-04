@@ -1,3 +1,6 @@
+<<<<<<< HEAD:my-nest-project/.gitignore
+.vercel
+=======
 /dist
 /node_modules
 /build
@@ -44,3 +47,4 @@ pids
 *.pid.lock
 
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+>>>>>>> 2c9520e0c5abfdb1cab6f2365c73ae848ed86a0c:nest-project/.gitignore
