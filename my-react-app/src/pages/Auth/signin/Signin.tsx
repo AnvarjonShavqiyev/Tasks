@@ -2,13 +2,13 @@ import { Form, Input, Button } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../redux/store/Store';
-import { signInUser } from '../../../redux/features/AuthSlice';
-import { User } from '../../../types';
+import { signUpUser } from '../../../redux/features/AuthSlice';
 
 const Signin = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const onFinish = (values:any) => {
-    dispatch(signInUser({ email: values.email }));
+  const onFinish = (values: { email: string; password: string }) => {
+    console.log('Signin values:', values);
+    dispatch(signUpUser(values));
   };
 
   return (
