@@ -20,7 +20,6 @@ export const createUser = createAsyncThunk<User, { newUser: any }, { rejectValue
       const response: AxiosResponse<User> = await instance.post("/auth/signup", newUser);
       return response.data;
     } catch (error: any) {
-      console.log('Error creating user:', error);
       return thunkAPI.rejectWithValue('Failed to create user');
     }
 });
@@ -32,7 +31,6 @@ export const signUpUser = createAsyncThunk<loginResponse, { email: string; passw
       const response: AxiosResponse<loginResponse> = await instance.post(`/auth/login`, { email, password });
       return response.data;
     } catch (error: any) {
-      console.log('Error signing in user:', error);
       return thunkAPI.rejectWithValue('Failed to sign in user');
     }
 });
