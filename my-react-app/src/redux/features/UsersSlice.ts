@@ -20,16 +20,15 @@ interface DeleteUserPayload {
   id: string;  
 }
 
+interface SearchUserPayload {
+  search: string
+}
+
 export const getAllUsers = createAsyncThunk<User[], void, { rejectValue: string }>(
   'user/getAllUsers',
   async (_, thunkAPI) => {
     try {
-      const token = localStorage.getItem('token')
-      const response: AxiosResponse<User[]> = await instance.get("/users",{
-        headers:{
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const response: AxiosResponse<User[]> = await instance.get("/users");
       return response.data;
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -42,12 +41,7 @@ export const updateUser = createAsyncThunk<User, UpdateUserPayload, { rejectValu
   'user/updateUser',
   async ({ id, newData }, thunkAPI) => {
     try {
-      const token = localStorage.getItem('token')
-      const response: AxiosResponse<User> = await instance.put(`/users/${id}`, newData, {
-        headers:{
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const response: AxiosResponse<User> = await instance.put(`/users/${id}`, newData);
       return response.data;
     } catch (error) {
       console.error('Error updating user:', error);
@@ -60,16 +54,24 @@ export const deleteUser = createAsyncThunk<User, DeleteUserPayload, { rejectValu
   'user/deleteUser',
   async ({ id }, thunkAPI) => {
     try {
-      const token = localStorage.getItem('token')
-      const response: AxiosResponse<User> = await instance.delete(`/users/${id}`, {
-        headers:{
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const response: AxiosResponse<User> = await instance.delete(`/users/${id}`);
       return response.data;
     } catch (error) {
       console.error('Error deleting user:', error);
       return thunkAPI.rejectWithValue('Failed to delete user');
+    }
+  }
+);
+
+export const searchUser = createAsyncThunk<User[], SearchUserPayload, { rejectValue: string }>(
+  'user/searchUser',
+  async ({search}, thunkAPI) => {
+    try {
+      const response: AxiosResponse<User[]> = await instance.get(`/users/search?q=${search}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      return thunkAPI.rejectWithValue('Failed to fetch users');
     }
   }
 );
@@ -95,6 +97,10 @@ export const userSlice = createSlice({
       console.log(action.payload.id)
       localStorage.setItem('users', JSON.stringify(state.users));
     });
+    builder.addCase(searchUser.fulfilled, (state, action: PayloadAction<User[]>) => {
+      state.users = action.payload;
+      localStorage.setItem('users', JSON.stringify(action.payload));
+    })
   },
 });
 
