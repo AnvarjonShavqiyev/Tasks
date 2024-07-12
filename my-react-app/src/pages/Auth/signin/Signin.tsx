@@ -7,7 +7,6 @@ import { signUpUser } from '../../../redux/features/AuthSlice';
 const Signin = () => {
   const dispatch = useDispatch<AppDispatch>()
   const onFinish = (values: { email: string; password: string }) => {
-    console.log('Signin values:', values);
     dispatch(signUpUser(values));
   };
 
@@ -41,6 +40,7 @@ const Signin = () => {
           </Button>
         </Form.Item>
       </Form>
+      
     </div>
   );
 };
