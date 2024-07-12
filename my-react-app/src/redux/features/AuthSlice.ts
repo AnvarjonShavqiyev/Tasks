@@ -1,36 +1,36 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { User } from '../../types';
-import { AxiosResponse } from 'axios';
+import { loginResponse, User } from '../../types';
+import axios, { AxiosResponse } from 'axios';
 import instance from '../../service/api/axios';
 
 export interface UserState {
   user: User | null;
+  token: string | null;
 }
 
 const initialState: UserState = {
   user: JSON.parse(localStorage.getItem("user") ?? 'null') || null,
+  token: localStorage.getItem("token") || null  
 };
 
 export const createUser = createAsyncThunk<User, { newUser: any }, { rejectValue: string }>(
   'auth/createUser',
   async ({ newUser }, thunkAPI) => {
     try {
-      const response: AxiosResponse<User> = await instance.post("/users", newUser);
+      const response: AxiosResponse<User> = await instance.post("/auth/signup", newUser);
       return response.data;
     } catch (error: any) {
-      console.log('Error creating user:', error);
       return thunkAPI.rejectWithValue('Failed to create user');
     }
 });
 
-export const signInUser = createAsyncThunk<User, { email: any }, { rejectValue: string }>(
-  'auth/signInUser',
-  async ({ email }, thunkAPI) => {
+export const signUpUser = createAsyncThunk<loginResponse, { email: string; password: string }, { rejectValue: string }>(
+  'auth/signUp',
+  async ({ email, password }, thunkAPI) => {
     try {
-      const response: AxiosResponse<User> = await instance.get(`/users/getByEmail/${email}`);
+      const response: AxiosResponse<loginResponse> = await instance.post(`/auth/login`, { email, password });
       return response.data;
     } catch (error: any) {
-      console.log('Error signing in user:', error);
       return thunkAPI.rejectWithValue('Failed to sign in user');
     }
 });
@@ -51,10 +51,11 @@ export const authSlice = createSlice({
         window.location.href = `${window.location.origin}/signIn`;
       }
     });
-    builder.addCase(signInUser.fulfilled, (state, action: PayloadAction<User>) => {
-      if (action.payload.id) {
-        state.user = action.payload;
-        localStorage.setItem('user', JSON.stringify(action.payload));
+    builder.addCase(signUpUser.fulfilled, (state, action: PayloadAction<loginResponse>) => {
+      if (action.payload) {
+        state.user = action.payload.thisUser;
+        localStorage.setItem('user', JSON.stringify(action.payload.thisUser));
+        localStorage.setItem('token', action.payload.access_token);
         window.location.href = `${window.location.origin}/`;
       }
     });

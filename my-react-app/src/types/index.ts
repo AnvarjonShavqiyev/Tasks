@@ -4,3 +4,7 @@ export interface User {
     email: string,
     password: string
 }
+export interface loginResponse {
+    thisUser: User,
+    access_token: string
+}

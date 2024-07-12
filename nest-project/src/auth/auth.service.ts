@@ -36,7 +36,7 @@ export class AuthService {
   async login(user: User) {
     try {
       const thisUser = await this.userService.findByEmail(user.email)
-      const payload = { email: user.email};
+      const payload = { email: thisUser.email, role: thisUser.role };
       const isExist = await this.validateUser(user.email, user.password)
       if(isExist){
         return {
