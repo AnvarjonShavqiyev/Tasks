@@ -30,7 +30,12 @@ export const getAllUsers = createAsyncThunk<User[], void, { rejectValue: string 
   'user/getAllUsers',
   async (_, thunkAPI) => {
     try {
-      const response: AxiosResponse<User[]> = await instance.get("/users");
+      const token = localStorage.getItem('token')
+      const response: AxiosResponse<User[]> = await instance.get("/users",{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      });
       return response.data;
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -43,7 +48,12 @@ export const updateUser = createAsyncThunk<User, UpdateUserPayload, { rejectValu
   'user/updateUser',
   async ({ id, newData }, thunkAPI) => {
     try {
-      const response: AxiosResponse<User> = await instance.put(`/users/${id}`, newData);
+      const token = localStorage.getItem('token')
+      const response: AxiosResponse<User> = await instance.put(`/users/${id}`, newData, {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      });
       return response.data;
     } catch (error) {
       console.error('Error updating user:', error);
@@ -56,7 +66,12 @@ export const deleteUser = createAsyncThunk<User, UserPayload, { rejectValue: str
   'user/deleteUser',
   async ({ id }, thunkAPI) => {
     try {
-      const response: AxiosResponse<User> = await instance.delete(`/users/${id}`);
+      const token = localStorage.getItem('token')
+      const response: AxiosResponse<User> = await instance.delete(`/users/${id}`, {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      });
       return response.data;
     } catch (error) {
       console.error('Error deleting user:', error);
