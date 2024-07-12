@@ -29,7 +29,7 @@ const Navbar = () => {
               <Avatar className='user-avatar'>{user?.name[0].toUpperCase()}</Avatar>   
               <div className='user-profile'>
                 <h4 className='user-name'>{user?.name}</h4>
-                <Link className='profile-link' to='/profile'>Account</Link>
+                <Link className='profile-link' to={`/profile/${user?.id}`}>Account</Link>
               </div>
             </div>
             <div className='search-wrapper'>

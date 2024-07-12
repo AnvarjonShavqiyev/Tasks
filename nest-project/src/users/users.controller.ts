@@ -30,10 +30,9 @@ export class UsersController {
     return this.userService.create(createUserDto);
   }
 
-  @UseGuards(RolesGuard)
-  @Get(':email')
-  async findOne(@Param('email') email: string): Promise<User> {
-    return this.userService.findByEmail(email);
+  @Get(':id')
+  async findOne(@Param('id') id: number): Promise<User> {
+    return this.userService.findById(id);
   }
 
   @UseGuards(RolesGuard)

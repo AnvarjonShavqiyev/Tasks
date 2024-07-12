@@ -5,10 +5,12 @@ import instance from '../../service/api/axios';
 
 export interface UserState {
   users: User[];
+  thisUser: User;
 }
 
 const initialState: UserState = {
-  users: JSON.parse(localStorage.getItem('users') ?? '[]')
+  users: JSON.parse(localStorage.getItem('users') ?? '[]'),
+  thisUser:  JSON.parse(localStorage.getItem('thisUser') ?? '[]')
 };
 
 interface UpdateUserPayload {
@@ -16,8 +18,8 @@ interface UpdateUserPayload {
   newData: Partial<User>;
 }
 
-interface DeleteUserPayload {
-  id: string;  
+interface UserPayload {
+  id: any;  
 }
 
 interface SearchUserPayload {
@@ -50,7 +52,7 @@ export const updateUser = createAsyncThunk<User, UpdateUserPayload, { rejectValu
   }
 );
 
-export const deleteUser = createAsyncThunk<User, DeleteUserPayload, { rejectValue: string }>(
+export const deleteUser = createAsyncThunk<User, UserPayload, { rejectValue: string }>(
   'user/deleteUser',
   async ({ id }, thunkAPI) => {
     try {
@@ -72,6 +74,19 @@ export const searchUser = createAsyncThunk<User[], SearchUserPayload, { rejectVa
     } catch (error) {
       console.error('Error fetching users:', error);
       return thunkAPI.rejectWithValue('Failed to fetch users');
+    }
+  }
+);
+
+export const getById = createAsyncThunk<User, UserPayload, { rejectValue: string }>(
+  'user/getById',
+  async ({ id }, thunkAPI) => {
+    try {
+      const response: AxiosResponse<User> = await instance.get(`/users/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      return thunkAPI.rejectWithValue('Failed to get user');
     }
   }
 );
@@ -100,6 +115,10 @@ export const userSlice = createSlice({
     builder.addCase(searchUser.fulfilled, (state, action: PayloadAction<User[]>) => {
       state.users = action.payload;
       localStorage.setItem('users', JSON.stringify(action.payload));
+    })
+    builder.addCase(getById.fulfilled, (state, action: PayloadAction<User>) => {
+      state.thisUser = action.payload;
+      localStorage.setItem('thisUser', JSON.stringify(action.payload));
     })
   },
 });
