@@ -1,3 +1,57 @@
-.user-information-wrapper{
+.user-information-wrapper {
     padding-top: 20px;
-}
+    display: flex;
+    gap: 30px;
+  
+    .user-info__wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+  
+      .info-title {
+        font-size: 20px;
+        font-weight: 700;
+      }
+    }
+  
+    .user-image__wrapper {
+      .user-image {
+        width: 130px;
+        aspect-ratio: 1/1;
+      }
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+  }
+  
+  .file-input-container {
+    position: relative;
+    display: inline-block;
+  
+    .file-input {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+  
+    .file-input-label {
+      background-color: #000;
+      width: 125px;
+      color: white;
+      padding: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: inline-block;
+  
+      &.disabled {
+        background-color: #515050;
+        cursor: not-allowed;
+      }
+    }
+  }
+  
