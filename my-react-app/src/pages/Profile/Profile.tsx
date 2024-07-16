@@ -15,7 +15,6 @@ const Profile:React.FC = () => {
   useEffect(()=> {
     dispatch(getById({ id }))
   },[])
-  console.log(thisUser)
   return (
     <div className='profile-wrapper'>
         <ProfileNav thisUser={thisUser}/>
