@@ -1,13 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { Container } from '../../utils/Utils'
-import { AppDispatch, RootState } from '../../redux/store/Store'
-import { logOut } from '../../redux/features/AuthSlice'
-import './Navbar.scss'
-import { Avatar } from 'antd'
-import { Link } from 'react-router-dom'
-import { SearchOutlined } from '@ant-design/icons'
-import { useEffect, useState } from 'react'
-import { searchUser } from '../../redux/features/UsersSlice'
+import { useDispatch, useSelector } from 'react-redux';
+import { Container } from '../../utils/Utils';
+import { AppDispatch, RootState } from '../../redux/store/Store';
+import { logOut } from '../../redux/features/AuthSlice';
+import './Navbar.scss';
+import { Avatar } from 'antd';
+import { Link } from 'react-router-dom';
+import { SearchOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
+import { searchUser } from '../../redux/features/UsersSlice';
 
 const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>()
