@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { SearchOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { searchUser } from '../../redux/features/UsersSlice';
+import { PROFILE_LINK } from '../router/constants.tsx';
 
 const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -29,7 +30,7 @@ const Navbar = () => {
               <Avatar className='user-avatar'>{user?.name[0].toUpperCase()}</Avatar>   
               <div className='user-profile'>
                 <h4 className='user-name'>{user?.name}</h4>
-                <Link className='profile-link' to='/profile'>Account</Link>
+                <Link className='profile-link' to={PROFILE_LINK}>Account</Link>
               </div>
             </div>
             <div className='search-wrapper'>
