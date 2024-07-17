@@ -19,7 +19,7 @@ interface UpdateUserPayload {
 }
 
 interface UserPayload {
-  id: any;  
+  id: string;  
 }
 
 interface SearchUserPayload {
