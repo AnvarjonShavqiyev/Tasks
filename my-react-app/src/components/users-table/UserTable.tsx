@@ -7,6 +7,7 @@ import { Container } from '../../utils/Utils';
 import { DeleteFilled, EditFilled } from '@ant-design/icons';
 import { EditableCell } from '../editableCell/EditableCell';
 import './UserTable.scss';
+import { Link } from 'react-router-dom';
 
 interface User {
   id: string;
@@ -81,6 +82,9 @@ const UserTable: React.FC = () => {
       dataIndex: 'name',
       width: '25%',
       editable: true,
+      render:(_:any, record: User) => {
+        return <Link style={{color:'#000'}} to={`/profile/${record.id}`}>{record.name}</Link>
+      }
     },
     {
       title: 'Email',

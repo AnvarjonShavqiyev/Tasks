@@ -1,8 +1,8 @@
 export interface User {
-    id: any;
+    id: string;
     name: string,
     email: string,
-    password: string
+    password: string,
 }
 export interface loginResponse {
     thisUser: User,
