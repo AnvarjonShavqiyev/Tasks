@@ -1,4 +1,4 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+  import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { User } from '../../types';
 import { AxiosResponse } from 'axios';
 import instance from '../../service/api/axios';
@@ -38,7 +38,6 @@ export const getAllUsers = createAsyncThunk<User[], void, { rejectValue: string 
       });
       return response.data;
     } catch (error) {
-      console.error('Error fetching users:', error);
       return thunkAPI.rejectWithValue('Failed to fetch users');
     }
   }
@@ -56,7 +55,6 @@ export const updateUser = createAsyncThunk<User, UpdateUserPayload, { rejectValu
       });
       return response.data;
     } catch (error) {
-      console.error('Error updating user:', error);
       return thunkAPI.rejectWithValue('Failed to update user');
     }
   }
@@ -74,7 +72,6 @@ export const deleteUser = createAsyncThunk<User, UserPayload, { rejectValue: str
       });
       return response.data;
     } catch (error) {
-      console.error('Error deleting user:', error);
       return thunkAPI.rejectWithValue('Failed to delete user');
     }
   }
@@ -87,7 +84,6 @@ export const searchUser = createAsyncThunk<User[], SearchUserPayload, { rejectVa
       const response: AxiosResponse<User[]> = await instance.get(`/users/search?q=${search}`);
       return response.data;
     } catch (error) {
-      console.error('Error fetching users:', error);
       return thunkAPI.rejectWithValue('Failed to fetch users');
     }
   }
@@ -100,7 +96,6 @@ export const getById = createAsyncThunk<User, UserPayload, { rejectValue: string
       const response: AxiosResponse<User> = await instance.get(`/users/${id}`);
       return response.data;
     } catch (error) {
-      console.error('Error deleting user:', error);
       return thunkAPI.rejectWithValue('Failed to get user');
     }
   }
@@ -124,7 +119,6 @@ export const userSlice = createSlice({
     });
     builder.addCase(deleteUser.fulfilled, (state, action: PayloadAction<User>) => {
       state.users = state.users.filter(user => user.id != action.payload.id);
-      console.log(action.payload.id)
       localStorage.setItem('users', JSON.stringify(state.users));
     });
     builder.addCase(searchUser.fulfilled, (state, action: PayloadAction<User[]>) => {
