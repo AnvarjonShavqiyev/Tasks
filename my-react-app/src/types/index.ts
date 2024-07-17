@@ -1,5 +1,5 @@
 export interface User {
-    id: any;
+    id: string;
     name: string,
     email: string,
     password: string,
@@ -32,3 +32,4 @@ export interface ChangeUserPhotoPayload {
 export interface ChangeUserPhotoResponse {
     thisUser:User
 }
+
