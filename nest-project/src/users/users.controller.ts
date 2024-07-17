@@ -8,16 +8,24 @@ import { Roles } from '../auth/decorators/roles.decorator.ts/roles.decorator.ts.
 import { RolesGuard } from 'src/auth/guards/roles.guard.ts.guard';
 import { query } from 'express';
 
+
 @Roles(Role.ADMIN)
 @Controller('users')
 @UseGuards(JwtAuthGuard) 
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
+
+  @UseGuards(RolesGuard)
+  @Post()
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.userService.create(createUserDto);
+  }
   @Get()
   async getAllUsers(): Promise<User[]> {
     return this.userService.findAll();
   }
+
 
   @Get('search')
   async search(@Query('q') query:string): Promise<User[]> {
@@ -33,7 +41,6 @@ export class UsersController {
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<User> {
     return this.userService.findById(id);
-  }
 
   @UseGuards(RolesGuard)
   @Put(':id')

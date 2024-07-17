@@ -31,13 +31,9 @@
 .auth-action-title {
   width: 50%;
   text-align: center;
-}
-
-.auth-action-title {
   font-size: 20px;
   color: #000;
 }
-
 .active {
   position: relative;
 }
@@ -65,4 +61,5 @@
   flex-direction: column;
   align-items: center;
   min-height: 478px;
-}/*# sourceMappingURL=Auth.css.map */
+}
+}
