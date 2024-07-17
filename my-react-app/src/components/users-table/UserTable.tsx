@@ -22,7 +22,8 @@ const UserTable: React.FC = () => {
   const [editingKey, setEditingKey] = useState<string>('');
   const dispatch = useDispatch<AppDispatch>();
   const isEditing = (record: User) => record.id === editingKey;
-
+  const userRole = localStorage.getItem('role');
+  
   useEffect(() => {
     dispatch(getAllUsers());
   }, [dispatch]);
@@ -96,6 +97,7 @@ const UserTable: React.FC = () => {
     {
       title: 'Actions',
       dataIndex: 'operation',
+      width:'50%',
       render: (_: any, record: User) => {
         const editable = isEditing(record);
         return editable ? (
@@ -108,14 +110,14 @@ const UserTable: React.FC = () => {
             </Popconfirm>
           </span>
         ) : (
-          <div className="actions__wrapper">
+          userRole == 'admin' ? <div className="actions__wrapper">
             <Button danger disabled={editingKey !== ''} onClick={() => edit(record)}>
               <EditFilled />
             </Button>
             <Button type="primary" danger onClick={() => deleteUsers(record.id)}>
               <DeleteFilled />
             </Button>
-          </div>
+          </div> : <div><p>You are not admin</p></div>
         );
       },
     },
