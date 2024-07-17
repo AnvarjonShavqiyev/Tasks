@@ -1,17 +1,21 @@
-  import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { User } from '../../types';
+
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { ChangeUserPhotoPayload, ChangeUserPhotoResponse, SearchUserPayload, UpdateUserPayload, User, UserPayload } from '../../types';
 import { AxiosResponse } from 'axios';
 import instance from '../../service/api/axios';
 
 export interface UserState {
   users: User[];
   thisUser: User;
+  loading: boolean
 }
 
 const initialState: UserState = {
   users: JSON.parse(localStorage.getItem('users') ?? '[]'),
-  thisUser:  JSON.parse(localStorage.getItem('thisUser') ?? '[]')
+  thisUser:  JSON.parse(localStorage.getItem('thisUser') ?? '[]'),
+  loading: false
 };
+
 
 interface UpdateUserPayload {
   id: string;
@@ -25,6 +29,7 @@ interface UserPayload {
 interface SearchUserPayload {
   search: string
 }
+
 
 export const getAllUsers = createAsyncThunk<User[], void, { rejectValue: string }>(
   'user/getAllUsers',
@@ -101,6 +106,32 @@ export const getById = createAsyncThunk<User, UserPayload, { rejectValue: string
   }
 );
 
+export const updateUserPhoto = createAsyncThunk<ChangeUserPhotoResponse, ChangeUserPhotoPayload, { rejectValue: string }>(
+  'user/updateUserPhoto',
+  async ({ id, file }, thunkAPI) => {
+    try {
+      const token = localStorage.getItem('token')
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response: AxiosResponse<ChangeUserPhotoResponse> = await instance.post(
+        `/users/${id}/upload`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+      return response.data;
+    } catch (error) { 
+      console.error('Error updating user:', error);
+      return thunkAPI.rejectWithValue('Failed to update user');
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -128,6 +159,14 @@ export const userSlice = createSlice({
     builder.addCase(getById.fulfilled, (state, action: PayloadAction<User>) => {
       state.thisUser = action.payload;
       localStorage.setItem('thisUser', JSON.stringify(action.payload));
+    })
+    builder.addCase(updateUserPhoto.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(updateUserPhoto.fulfilled, (state, action: PayloadAction<ChangeUserPhotoResponse>) => {
+      state.thisUser = action.payload.thisUser;
+      localStorage.setItem('thisUser', JSON.stringify(action.payload));
+      state.loading = false
     })
   },
 });

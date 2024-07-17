@@ -16,7 +16,7 @@ const Profile:React.FC = () => {
     dispatch(getById({ id }))
   },[])
   return (
-    <div className='profile-wrapper'>
+    <div className='profile'>
         <ProfileNav thisUser={thisUser}/>
         <Container>
             <UserInformation thisUser={thisUser}/>

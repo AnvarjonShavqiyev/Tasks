@@ -8,7 +8,8 @@ import { DeleteResult, ILike, Repository, UpdateResult } from 'typeorm';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/user.dto';
 import * as bcrypt from 'bcryptjs';
-
+import { v2 as cloudinary } from 'cloudinary';
+import { UploadApiResponse } from 'cloudinary';
 
 @Injectable()
 export class UserService {
@@ -73,4 +74,8 @@ export class UserService {
       .orWhere('user.email ILIKE :searchTerm', { searchTerm: `%${searchTerm}%` })
       .getMany();
   }
+
+  async updateImageUrl(id: number, imageUrl: string): Promise<void> {
+    await this.userRepository.update(id, { imageUrl });
+  } 
 }

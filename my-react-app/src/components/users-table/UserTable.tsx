@@ -14,6 +14,8 @@ interface User {
   name: string;
   email: string;
   password: string;
+  imageUrl: string;
+  role:string
 }
 
 const UserTable: React.FC = () => {
@@ -78,6 +80,14 @@ const UserTable: React.FC = () => {
 
   const columns = [
     {
+      title: 'Image',
+      dataIndex: 'imageUrl',
+      editable: true,
+      render:(_:any, record: User) => {
+        return <Link style={{color:'#000'}} to={`/profile/${record.id}`}><img width={40} height={40} src={record.imageUrl}/></Link>
+      }
+    },
+    {
       title: 'Name',
       dataIndex: 'name',
       width: '25%',
@@ -93,8 +103,8 @@ const UserTable: React.FC = () => {
       editable: true,
     },
     {
-      title: 'Password',
-      dataIndex: 'password',
+      title: 'Role',
+      dataIndex: 'role',
       width: '15%',
       editable: true,
     },
