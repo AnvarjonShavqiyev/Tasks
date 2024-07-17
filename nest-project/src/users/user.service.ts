@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, ILike, Repository, UpdateResult } from 'typeorm';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/user.dto';
 import * as bcrypt from 'bcryptjs';
@@ -19,6 +19,10 @@ export class UserService {
 
   async findByEmail(email: string): Promise<User | undefined> {
     return this.userRepository.findOne({ where: { email } });
+  }
+
+  async findById(id: number): Promise<User | undefined> {
+    return this.userRepository.findOne({ where: { id } });
   }
 
   async findAll(): Promise<User[]>{
@@ -60,5 +64,13 @@ export class UserService {
       }
       throw new BadRequestException('Failed to delete user');
     }
+  }
+
+  async searchUsers(searchTerm: string): Promise<User[]> {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .where('user.name ILIKE :searchTerm', { searchTerm: `%${searchTerm}%` })
+      .orWhere('user.email ILIKE :searchTerm', { searchTerm: `%${searchTerm}%` })
+      .getMany();
   }
 }
