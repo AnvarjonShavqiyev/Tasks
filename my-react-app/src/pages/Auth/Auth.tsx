@@ -3,18 +3,19 @@ import './Auth.scss';
 import SignIn from './signin/Signin';
 import SignUp from './signup/Signup';
 import React from 'react';
+
 const Auth: React.FC = () => {
   const { authName } = useParams();
   return (
-    <div className="auth-wrapper">
-      <div className="auth-form-wrapper">
+    <div className="auth">
+      <div className="auth__form-wrapper">
         <div className="auth__header">
           <Link
             to="/signIn"
             className={
               authName === 'signIn'
-                ? 'auth-action-title active'
-                : 'auth-action-title'
+                ? 'auth__action-title auth__action-title--active'
+                : 'auth__action-title'
             }
           >
             Sign In
@@ -23,8 +24,8 @@ const Auth: React.FC = () => {
             to="/signUp"
             className={
               authName === 'signUp'
-                ? 'auth-action-title active'
-                : 'auth-action-title'
+                ? 'auth__action-title auth__action-title--active'
+                : 'auth__action-title'
             }
           >
             Create account

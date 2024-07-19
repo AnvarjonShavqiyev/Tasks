@@ -134,6 +134,21 @@ export const updateUserPhoto = createAsyncThunk<
   }
 });
 
+export const exportData = createAsyncThunk<
+  Blob,
+  UserPayload,
+  { rejectValue: string }
+>('user/exportData', async ({ id }, thunkAPI) => {
+  try {
+    const response: AxiosResponse<Blob> = await instance.get(`/users/export/${id}?format=csv`, {
+      responseType: 'blob', 
+    });
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue('Failed to export user data');
+  }
+});
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -195,6 +210,17 @@ export const userSlice = createSlice({
         state.userActivities = action.payload;
         localStorage.setItem('activity', JSON.stringify(action.payload));
         state.loading = false;
+      }
+    );
+    builder.addCase(
+      exportData.fulfilled,
+      (state, action: PayloadAction<Blob>) => {
+        const url = URL.createObjectURL(action.payload);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'user-data.csv';
+        a.click();
+        URL.revokeObjectURL(url);
       }
     );
   },
