@@ -28,12 +28,6 @@ export class UsersController {
     return this.userService.searchUsers(query);
   } 
 
-  @UseGuards(RolesGuard)
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.userService.create(createUserDto);
-  }
-
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<User> {
     return this.userService.findById(id);

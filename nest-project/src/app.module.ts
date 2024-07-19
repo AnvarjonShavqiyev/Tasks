@@ -1,9 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './users/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ActivityLogModule } from './activity-log/activity-log.module';
 import { User } from './users/user.entity';
+import { ActivityLog } from './activity-log/activity-log.entity';
 
 @Module({
   imports: [
@@ -16,14 +18,15 @@ import { User } from './users/user.entity';
         type: 'postgres',
         url: configService.get<string>('DATABASE_URL'),
         ssl: { rejectUnauthorized: false },
-        entities: [User],
+        entities: [User, ActivityLog],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forFeature([User, ActivityLog]),
     UserModule,
     AuthModule,
+    ActivityLogModule,
   ],
-  
 })
-export class AppModule {}
+export class AppModule{}

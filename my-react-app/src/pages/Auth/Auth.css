@@ -20,7 +20,7 @@
 
 .auth__header::after {
   position: absolute;
-  content: "";
+  content: '';
   height: 1.5px;
   width: 100%;
   left: 0;
@@ -46,7 +46,7 @@
   position: absolute;
   bottom: -10px;
   left: 0;
-  content: "";
+  content: '';
   height: 1.5px;
   width: 200px;
   background-color: #007df9;
@@ -65,4 +65,4 @@
   flex-direction: column;
   align-items: center;
   min-height: 478px;
-}/*# sourceMappingURL=Auth.css.map */
+} /*# sourceMappingURL=Auth.css.map */

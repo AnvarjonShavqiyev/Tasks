@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Input, InputNumber, Popconfirm, Table, Typography, Button, TableProps } from 'antd';
+import {
+  Form,
+  Popconfirm,
+  Table,
+  Typography,
+  Button,
+  TableProps,
+} from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../redux/store/Store';
-import { deleteUser, getAllUsers, updateUser } from '../../redux/features/UsersSlice';
-import { Container } from '../../utils/Utils';
+import { AppDispatch, RootState } from '@redux/store/Store';
+import {
+  deleteUser,
+  getAllUsers,
+  updateUser,
+} from '@redux/features/UsersSlice';
+import { Container } from '@utils/Utils';
 import { DeleteFilled, EditFilled } from '@ant-design/icons';
-import { EditableCell } from '../editableCell/EditableCell';
+import { EditableCell } from '@components/editableCell/EditableCell';
 import './UserTable.scss';
 import { Link } from 'react-router-dom';
 
@@ -15,7 +26,7 @@ interface User {
   email: string;
   password: string;
   imageUrl: string;
-  role:string
+  role: string;
 }
 
 const UserTable: React.FC = () => {
@@ -26,13 +37,13 @@ const UserTable: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const isEditing = (record: User) => record.id === editingKey;
   const userRole = localStorage.getItem('role');
-  
+
   useEffect(() => {
     dispatch(getAllUsers());
   }, [dispatch]);
 
   useEffect(() => {
-    setData(users); 
+    setData(users);
   }, [users]);
 
   const edit = (record: Partial<User> & { id: React.Key }) => {
@@ -69,12 +80,12 @@ const UserTable: React.FC = () => {
     }
   };
 
-  const deleteUsers = async(id: string) => {
-    try{
+  const deleteUsers = async (id: string) => {
+    try {
       await dispatch(deleteUser({ id }));
-      setData(data.filter((user:User) => user.id !== id));
-    }catch(error){
-      console.log(error)
+      setData(data.filter((user: User) => user.id !== id));
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -83,18 +94,28 @@ const UserTable: React.FC = () => {
       title: 'Image',
       dataIndex: 'imageUrl',
       editable: true,
-      render:(_:any, record: User) => {
-        return <Link style={{color:'#000'}} to={`/profile/${record.id}`}><img width={40} height={40} src={record.imageUrl}/></Link>
-      }
+      render: (text: string, record: User) => {
+        if (!record) return null;
+        return (
+          <Link style={{ color: '#000' }} to={`/profile/${record.id}`}>
+            <img width={40} height={40} src={record.imageUrl} />
+          </Link>
+        );
+      },
     },
     {
       title: 'Name',
       dataIndex: 'name',
       width: '25%',
       editable: true,
-      render:(_:any, record: User) => {
-        return <Link style={{color:'#000'}} to={`/profile/${record.id}`}>{record.name}</Link>
-      }
+      render: (text: string, record: User) => {
+        if (!record) return null;
+        return (
+          <Link style={{ color: '#000' }} to={`/profile/${record.id}`}>
+            {record.name}
+          </Link>
+        );
+      },
     },
     {
       title: 'Email',
@@ -111,27 +132,43 @@ const UserTable: React.FC = () => {
     {
       title: 'Actions',
       dataIndex: 'operation',
-      width:'50%',
-      render: (_: any, record: User) => {
+      width: '50%',
+      render: (text: string, record: User) => {
+        if (!record) return null;
         const editable = isEditing(record);
         return editable ? (
           <span>
-            <Typography.Link onClick={() => save(record.id)} style={{ marginRight: 8 }}>
+            <Typography.Link
+              onClick={() => save(record.id)}
+              style={{ marginRight: 8 }}
+            >
               Save
             </Typography.Link>
             <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
               <a>Cancel</a>
             </Popconfirm>
           </span>
-        ) : (
-          userRole == 'admin' ? <div className="actions__wrapper">
-            <Button danger disabled={editingKey !== ''} onClick={() => edit(record)}>
+        ) : userRole === 'admin' ? (
+          <div className="actions__wrapper">
+            <Button
+              danger
+              disabled={editingKey !== ''}
+              onClick={() => edit(record)}
+            >
               <EditFilled />
             </Button>
-            <Button type="primary" danger onClick={() => deleteUsers(record.id)}>
+            <Button
+              type="primary"
+              danger
+              onClick={() => deleteUsers(record.id)}
+            >
               <DeleteFilled />
             </Button>
-          </div> : <div><p>You are not admin</p></div>
+          </div>
+        ) : (
+          <div>
+            <p>You are not admin</p>
+          </div>
         );
       },
     },

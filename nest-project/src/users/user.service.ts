@@ -4,18 +4,19 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, ILike, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/user.dto';
 import * as bcrypt from 'bcryptjs';
-import { v2 as cloudinary } from 'cloudinary';
-import { UploadApiResponse } from 'cloudinary';
+import * as jwt from 'jsonwebtoken';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private configService: ConfigService,  
   ) {}
 
   async findByEmail(email: string): Promise<User | undefined> {
@@ -26,14 +27,14 @@ export class UserService {
     return this.userRepository.findOne({ where: { id } });
   }
 
-  async findAll(): Promise<User[]>{
-    return this.userRepository.find()
+  async findAll(): Promise<User[]> {
+    return this.userRepository.find();
   }
 
   async updateUser(id: any, user: User): Promise<User> {
     try {
       if (user.password) {
-        user.password = bcrypt.hashSync(user.password, 10);  
+        user.password = bcrypt.hashSync(user.password, 10);
       }
       const updateResult: UpdateResult = await this.userRepository.update(id, user);
       if (updateResult.affected === 0) {
@@ -77,5 +78,14 @@ export class UserService {
 
   async updateImageUrl(id: number, imageUrl: string): Promise<void> {
     await this.userRepository.update(id, { imageUrl });
-  } 
+  }
+
+  async validateToken(token: string): Promise<User | null> {
+    try {
+      const decoded = jwt.verify(token, this.configService.get<string>('JWT_SECRET')) as { id: number };
+      return await this.userRepository.findOne({ where: { id: decoded.id } });
+    } catch (err) {
+      return null;
+    }
+  }
 }

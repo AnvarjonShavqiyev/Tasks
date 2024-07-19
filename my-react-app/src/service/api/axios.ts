@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const token = localStorage.getItem('token')
+const token = localStorage.getItem('token');
 
 const instance = axios.create({
   baseURL: 'http://localhost:3000',
@@ -8,7 +8,7 @@ const instance = axios.create({
     'Access-Control-Allow-Origin': '*',
     Accept: '*/*',
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`
+    Authorization: `Bearer ${token}`,
   },
 });
 

@@ -1,0 +1,25 @@
+.user-activities__wrapper{
+    padding: 30px 0;
+    h4{
+        font-size: 30px;
+        margin-bottom: 30px;
+    }
+    .all-activities{
+        background-color: #000;
+        color: rgb(62, 247, 16);
+        padding: 15px;
+        height: 450px;
+        overflow: auto;
+        scrollbar-color: #fff #000;
+        .activity{
+            display: flex;
+            align-items: center;
+            .activity-info{
+                width: 300px;
+            }
+            .activity-info:last-child{
+                width: 100%;
+            }
+        }
+    }
+}
