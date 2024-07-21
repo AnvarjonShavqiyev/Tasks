@@ -41,3 +41,22 @@ export interface UserActivity {
   time: string;
   user: User;
 }
+
+export interface Users {
+  users: User[];
+  total: number;
+  pageCount: number;
+}
+
+export interface FetchUsersParams {
+  page: number;
+  limit: number;
+}
+
+export interface UserState {
+  users: User[];
+  thisUser: User | null;
+  loading: boolean;
+  userActivities: UserActivity[];
+  paginatedUsers: Users | null;
+}

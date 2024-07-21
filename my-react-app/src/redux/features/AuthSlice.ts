@@ -14,9 +14,9 @@ const initialState: UserState = {
 };
 
 interface newUser {
-  email: string
-  name: string
-  password: string
+  email: string;
+  name: string;
+  password: string;
 }
 
 export const createUser = createAsyncThunk<
