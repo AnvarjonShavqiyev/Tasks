@@ -17,7 +17,6 @@ const UserActivities = () => {
   return (
     <div className="user-activities__wrapper">
       <h4>Your activities</h4>
-      {
         <div className="all-activities">
           {activities.map((activity: UserActivity, index: number) => {
             return (
@@ -29,7 +28,6 @@ const UserActivities = () => {
             );
           })}
         </div>
-      }
     </div>
   );
 };
