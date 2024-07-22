@@ -6,7 +6,7 @@
   "dependencies": {
     "antd": "5.18.3",
     "axios": "1.7.2",
-    "eslint-plugin-react-refresh": "^0.4.8",
+    "eslint-plugin-react-refresh": "0.4.8",
     "mui": "0.0.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@ant-design/icons": "5.3.7",
-    "@craco/craco": "^7.1.0",
+    "@craco/craco": "7.1.0",
     "@emotion/react": "11.11.4",
     "@emotion/styled": "11.11.5",
     "@mui/material": "5.15.20",
@@ -33,13 +33,13 @@
     "@types/node": "16.18.101",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
-    "@typescript-eslint/eslint-plugin": "^7.16.1",
-    "customize-cra": "^1.0.0",
-    "eslint-plugin-react-hooks": "^4.6.2",
+    "@typescript-eslint/eslint-plugin": "7.16.1",
+    "customize-cra": "1.0.0",
+    "eslint-plugin-react-hooks": "4.6.2",
     "globals": "15.8.0",
     "prettier": "3.3.3",
-    "react-app-rewired": "^2.2.1",
-    "typescript": "^5.5.3",
+    "react-app-rewired": "2.2.1",
+    "typescript": "5.5.3",
     "typescript-eslint": "7.16.1"
   },
   "scripts": {
