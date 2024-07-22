@@ -29,6 +29,7 @@ const UserTable: React.FC = () => {
   const [form] = Form.useForm();
   const users =
     useSelector((state: RootState) => state.users.paginatedUsers?.users) || [];
+  const total = useSelector((state: RootState) => state.users.paginatedUsers?.total);
   const [data, setData] = useState<User[]>(users);
   const [editingKey, setEditingKey] = useState<string>('');
   const dispatch = useDispatch<AppDispatch>();
@@ -215,7 +216,7 @@ const UserTable: React.FC = () => {
         showSizeChanger
         onChange={onShowSizeChange}
         defaultCurrent={1}
-        total={18}
+        total={total}
         className="table-pagination"
       />
     </Container>
