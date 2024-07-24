@@ -13,6 +13,7 @@ const initialState: UserState = {
   token: localStorage.getItem('token') || null,
 };
 
+
 interface newUser {
   email: string
   name: string

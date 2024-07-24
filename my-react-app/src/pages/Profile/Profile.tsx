@@ -23,8 +23,10 @@ const Profile: React.FC = () => {
         <UserInformation thisUser={thisUser} />
         <UserActivities />
       </Container>
+
     </div>
   );
 };
+
 
 export default Profile;
