@@ -1,28 +1,32 @@
-import React, { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { Container } from '../../utils/Utils'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../../redux/store/Store'
-import { getById } from '../../redux/features/UsersSlice'
-import './Profile.scss'
-import ProfileNav from '../../components/profileNav/ProfileNav'
-import UserInformation from '../../components/userInformation/UserInformation'
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { Container } from '@utils/Utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@redux/store/Store';
+import { getById } from '@redux/features/UsersSlice';
+import './Profile.scss';
+import ProfileNav from '@components/profileNav/ProfileNav';
+import UserInformation from '@components/userInformation/UserInformation';
+import UserActivities from '@components/user-activities/UserActivities';
 
-const Profile:React.FC = () => {
-  const {id} = useParams()
-  const dispatch = useDispatch<AppDispatch>() 
-  const thisUser = useSelector((state:RootState) => state.users.thisUser)
-  useEffect(()=> {
-    dispatch(getById({ id }))
-  },[])
+const Profile: React.FC = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch<AppDispatch>();
+  const thisUser = useSelector((state: RootState) => state.users.thisUser);
+  useEffect(() => {
+    dispatch(getById({ id }));
+  }, []);
   return (
-    <div className='profile'>
-        <ProfileNav thisUser={thisUser}/>
-        <Container>
-            <UserInformation thisUser={thisUser}/>
-        </Container>
-    </div>
-  )
-}
+    <div>
+      <ProfileNav thisUser={thisUser} />
+      <Container>
+        <UserInformation thisUser={thisUser} />
+        <UserActivities />
+      </Container>
 
-export default Profile
+    </div>
+  );
+};
+
+
+export default Profile;

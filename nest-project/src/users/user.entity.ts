@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, OneToMany } from 'typeorm';
 import { Role } from './role.enum';
+import { ActivityLog } from 'src/activity-log/activity-log.entity';
 
 @Entity()
 export class User {
@@ -27,4 +28,7 @@ export class User {
       this.imageUrl = process.env.DEFAULT_USER_IMAGE_URL;
     }
   }
+
+  @OneToMany(() => ActivityLog, activityLog => activityLog.user)
+  activityLogs: ActivityLog[];
 }

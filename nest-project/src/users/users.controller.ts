@@ -1,6 +1,5 @@
-import { Controller, Post, Body, Get, Param, Delete, Put, UseGuards, Query, UseInterceptors, ParseIntPipe, UploadedFile } from '@nestjs/common';
+import { Controller, Res, Post, Body, Get, Param, Delete, Put, UseGuards, Query, UseInterceptors, ParseIntPipe, UploadedFile } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard'; 
 import { Role } from './role.enum';
@@ -8,6 +7,7 @@ import { Roles } from '../auth/decorators/roles.decorator.ts/roles.decorator.ts.
 import { RolesGuard } from 'src/auth/guards/roles.guard.ts.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '../cloudinary/cloudinary.servise';
+import { Response } from 'express';
 
 
 @Roles(Role.ADMIN)
@@ -36,12 +36,6 @@ export class UsersController {
     return this.userService.searchUsers(query);
   } 
 
-  @UseGuards(RolesGuard)
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.userService.create(createUserDto);
-  }
-
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<User> {
     return this.userService.findById(id);
@@ -67,4 +61,24 @@ export class UsersController {
     const thisUser = await this.userService.findById(id)
     return { thisUser };
   }
+  @Get('export/:id')
+  async exportUser(
+    @Param('id') id: string,
+    @Query('format') format: 'csv' | 'json',
+    @Res() res: Response,
+  ) {
+    const userId = parseInt(id, 10);
+
+
+    try {
+      const fileBuffer = await this.userService.exportUser(userId, format);
+
+      res.setHeader('Content-Disposition', `attachment; filename="user_${userId}.${format}"`);
+      res.setHeader('Content-Type', format === 'csv' ? 'text/csv' : 'application/json');
+      res.send(fileBuffer);
+    } catch (error) {
+      res.status(404).send(error.message);
+    }
+  }
+
 }

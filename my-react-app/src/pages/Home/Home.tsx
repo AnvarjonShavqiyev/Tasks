@@ -1,14 +1,13 @@
-import React from 'react'
-import Navbar from '../../components/navbar/Navbar'
-import UserTable from '../../components/users-table/UserTable'
+import Navbar from '@components/navbar/Navbar';
+import UserTable from '@components/users-table/UserTable';
 
 const Home = () => {
   return (
     <>
-        <Navbar/>
-        <UserTable/>
+      <Navbar />
+      <UserTable />
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

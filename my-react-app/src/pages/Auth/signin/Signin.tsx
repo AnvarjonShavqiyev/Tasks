@@ -1,28 +1,45 @@
 import { Form, Input, Button } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../redux/store/Store';
-import { signUpUser } from '../../../redux/features/AuthSlice';
+import { AppDispatch } from '@redux/store/Store';
+import { signUpUser } from '@redux/features/AuthSlice';
 
 const Signin = () => {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const onFinish = (values: { email: string; password: string }) => {
     dispatch(signUpUser(values));
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop:'40px', width:"100%"}}>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: '40px',
+        width: '100%',
+      }}
+    >
       <Form
-        name="signin" 
+        name="signin"
         initialValues={{ remember: true }}
         onFinish={onFinish}
         style={{ width: '100%' }}
       >
         <Form.Item
           name="email"
-          rules={[{ required: true, message: 'Please input your Email!', type: 'email' }]}
+          rules={[
+            {
+              required: true,
+              message: 'Please input your Email!',
+              type: 'email',
+            },
+          ]}
         >
-          <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Email" />
+          <Input
+            prefix={<MailOutlined className="site-form-item-icon" />}
+            placeholder="Email"
+          />
         </Form.Item>
         <Form.Item
           name="password"
@@ -35,7 +52,12 @@ const Signin = () => {
           />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="signin-form-button" style={{ width: '100%' }}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="signin-form-button"
+            style={{ width: '100%' }}
+          >
             Sign In
           </Button>
         </Form.Item>

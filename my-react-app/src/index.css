@@ -2,10 +2,10 @@
   font-family: 'Poppins';
   src: url('./assets/fonts/Poppins/Poppins-Medium.ttf');
 }
-*{
+* {
   margin: 0;
   padding: 0;
 }
-body{
-  font-family: 'Poppins'
+body {
+  font-family: 'Poppins';
 }
