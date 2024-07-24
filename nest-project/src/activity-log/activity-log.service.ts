@@ -13,7 +13,6 @@ export class ActivityLogService {
 
   async createLog(user: User, activityType: string, description: string, time:string): Promise<ActivityLog> {
     const log = new ActivityLog();
-    console.log(activityType)
     log.user = user;
     log.activityType = activityType;
     log.description = description;

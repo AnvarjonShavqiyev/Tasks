@@ -4,6 +4,7 @@ import './ProfileNav.scss';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@redux/store/Store';
 import { logOut } from '@redux/features/AuthSlice';
+
 const ProfileNav = ({ thisUser }: { thisUser: User }) => {
   const dispatch = useDispatch<AppDispatch>();
   const onLogOut = () => {

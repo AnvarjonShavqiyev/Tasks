@@ -17,14 +17,16 @@ const Profile: React.FC = () => {
     dispatch(getById({ id }));
   }, []);
   return (
-    <div className="profile-wrapper">
+    <div>
       <ProfileNav thisUser={thisUser} />
       <Container>
         <UserInformation thisUser={thisUser} />
         <UserActivities />
       </Container>
+
     </div>
   );
 };
+
 
 export default Profile;

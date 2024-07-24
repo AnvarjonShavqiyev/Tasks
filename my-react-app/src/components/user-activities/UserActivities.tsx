@@ -5,15 +5,20 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@redux/store/Store';
 import { UserActivity } from '../../types';
+
 const UserActivities = () => {
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const activities = useSelector(
     (state: RootState) => state.users.userActivities
   );
+
   useEffect(() => {
-    dispatch(getUserActivity({ id }));
-  }, []);
+    if (id) {
+      dispatch(getUserActivity({ id }));
+    }
+  }, [id, dispatch]);
+
   return (
     <div className="user-activities__wrapper">
       <h4>Your activities</h4>

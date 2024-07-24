@@ -1,3 +1,4 @@
+
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   ChangeUserPhotoPayload,
@@ -51,8 +52,7 @@ export const updateUser = createAsyncThunk<
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue('Failed to update user');
-  }
-});
+
 
 export const deleteUser = createAsyncThunk<
   User,
@@ -80,8 +80,10 @@ export const searchUser = createAsyncThunk<
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue('Failed to fetch users');
+
   }
 });
+
 
 export const getById = createAsyncThunk<
   User,
@@ -95,6 +97,7 @@ export const getById = createAsyncThunk<
     return thunkAPI.rejectWithValue('Failed to get user');
   }
 });
+
 
 export const getUserActivity = createAsyncThunk<
   UserActivity[],
@@ -131,6 +134,21 @@ export const updateUserPhoto = createAsyncThunk<
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue('Failed to update user');
+  }
+});
+
+export const exportData = createAsyncThunk<
+  Blob,
+  UserPayload,
+  { rejectValue: string }
+>('user/exportData', async ({ id }, thunkAPI) => {
+  try {
+    const response: AxiosResponse<Blob> = await instance.get(`/users/export/${id}?format=csv`, {
+      responseType: 'blob', 
+    });
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue('Failed to export user data');
   }
 });
 
@@ -195,6 +213,17 @@ export const userSlice = createSlice({
         state.userActivities = action.payload;
         localStorage.setItem('activity', JSON.stringify(action.payload));
         state.loading = false;
+      }
+    );
+    builder.addCase(
+      exportData.fulfilled,
+      (state, action: PayloadAction<Blob>) => {
+        const url = URL.createObjectURL(action.payload);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'user-data.csv';
+        a.click();
+        URL.revokeObjectURL(url);
       }
     );
   },
