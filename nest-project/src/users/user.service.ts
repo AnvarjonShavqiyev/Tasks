@@ -28,8 +28,15 @@ export class UserService {
     return this.userRepository.findOne({ where: { id } });
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userRepository.find();
+  async findAll(page: number = 1, limit: number = 10): Promise<{ users: User[], total: number, pagesCount: number }> {
+    const [users, total] = await this.userRepository.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    const pagesCount = Math.ceil(total / limit);
+
+    return { users, total, pagesCount };
   }
 
   async updateUser(id: any, user: User): Promise<User> {

@@ -1,4 +1,3 @@
-
 .edit-btn{
     border: none;
     font-size: 25px;
@@ -6,7 +5,12 @@
     color: rgb(255, 191, 0);
     cursor: pointer;
 }
+
 .actions__wrapper{
     display: flex;
     gap: 15px;
+}
+
+.table-pagination{
+    margin: 35px 0;
 }

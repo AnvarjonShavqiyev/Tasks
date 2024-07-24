@@ -26,8 +26,11 @@ export class UsersController {
     return this.userService.create(createUserDto);
   }
   @Get()
-  async getAllUsers(): Promise<User[]> {
-    return this.userService.findAll();
+  async getAllUsers(
+    @Query('page', ParseIntPipe) page: number = 1,
+    @Query('limit', ParseIntPipe) limit: number = 10
+  ): Promise<{ users: User[], total: number }> {
+    return this.userService.findAll(page, limit);
   }
 
 

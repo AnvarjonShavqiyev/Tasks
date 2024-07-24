@@ -13,9 +13,17 @@ const Profile: React.FC = () => {
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const thisUser = useSelector((state: RootState) => state.users.thisUser);
+
   useEffect(() => {
-    dispatch(getById({ id }));
-  }, []);
+    if (id) {
+      dispatch(getById({ id }));
+    }
+  }, [id, dispatch]);
+
+  if (!thisUser) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
       <ProfileNav thisUser={thisUser} />

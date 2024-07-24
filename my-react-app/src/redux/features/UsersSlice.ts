@@ -3,27 +3,24 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   ChangeUserPhotoPayload,
   ChangeUserPhotoResponse,
+  FetchUsersParams,
   SearchUserPayload,
   UpdateUserPayload,
   User,
   UserActivity,
   UserPayload,
+  Users,
+  UserState,
 } from '../../types';
 import { AxiosResponse } from 'axios';
 import instance from '@service/api/axios';
 
-export interface UserState {
-  users: User[];
-  thisUser: User;
-  loading: boolean;
-  userActivities: UserActivity[];
-}
-
 const initialState: UserState = {
   users: JSON.parse(localStorage.getItem('users') ?? '[]'),
-  thisUser: JSON.parse(localStorage.getItem('thisUser') ?? '[]'),
+  thisUser: JSON.parse(localStorage.getItem('thisUser') ?? 'null'),
   loading: false,
   userActivities: JSON.parse(localStorage.getItem('activity') ?? '[]'),
+  paginatedUsers: JSON.parse(localStorage.getItem('paginatedUsers') ?? 'null'),
 };
 
 export const getAllUsers = createAsyncThunk<
@@ -137,18 +134,18 @@ export const updateUserPhoto = createAsyncThunk<
   }
 });
 
-export const exportData = createAsyncThunk<
-  Blob,
-  UserPayload,
+export const getLimitedUsers = createAsyncThunk<
+  Users,
+  FetchUsersParams,
   { rejectValue: string }
->('user/exportData', async ({ id }, thunkAPI) => {
+>('user/getLimitedUsers', async ({ page, limit }, thunkAPI) => {
   try {
-    const response: AxiosResponse<Blob> = await instance.get(`/users/export/${id}?format=csv`, {
-      responseType: 'blob', 
-    });
+    const response: AxiosResponse<Users> = await instance.get(
+      `/users?page=${page}&limit=${limit}`
+    );
     return response.data;
   } catch (error) {
-    return thunkAPI.rejectWithValue('Failed to export user data');
+    return thunkAPI.rejectWithValue('Failed to fetch users');
   }
 });
 
@@ -162,6 +159,7 @@ export const userSlice = createSlice({
       (state, action: PayloadAction<User[]>) => {
         state.users = action.payload;
         localStorage.setItem('users', JSON.stringify(action.payload));
+        state.loading = false;
       }
     );
     builder.addCase(
@@ -174,6 +172,7 @@ export const userSlice = createSlice({
           state.users[index] = action.payload;
           localStorage.setItem('users', JSON.stringify(state.users));
         }
+        state.loading = false;
       }
     );
     builder.addCase(
@@ -183,6 +182,7 @@ export const userSlice = createSlice({
           (user) => user.id != action.payload.id
         );
         localStorage.setItem('users', JSON.stringify(state.users));
+        state.loading = false;
       }
     );
     builder.addCase(
@@ -190,11 +190,13 @@ export const userSlice = createSlice({
       (state, action: PayloadAction<User[]>) => {
         state.users = action.payload;
         localStorage.setItem('users', JSON.stringify(action.payload));
+        state.loading = false;
       }
     );
     builder.addCase(getById.fulfilled, (state, action: PayloadAction<User>) => {
       state.thisUser = action.payload;
       localStorage.setItem('thisUser', JSON.stringify(action.payload));
+      state.loading = false;
     });
     builder.addCase(updateUserPhoto.pending, (state) => {
       state.loading = true;
@@ -203,7 +205,10 @@ export const userSlice = createSlice({
       updateUserPhoto.fulfilled,
       (state, action: PayloadAction<ChangeUserPhotoResponse>) => {
         state.thisUser = action.payload.thisUser;
-        localStorage.setItem('thisUser', JSON.stringify(action.payload));
+        localStorage.setItem(
+          'thisUser',
+          JSON.stringify(action.payload.thisUser)
+        );
         state.loading = false;
       }
     );
@@ -216,14 +221,12 @@ export const userSlice = createSlice({
       }
     );
     builder.addCase(
-      exportData.fulfilled,
-      (state, action: PayloadAction<Blob>) => {
-        const url = URL.createObjectURL(action.payload);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'user-data.csv';
-        a.click();
-        URL.revokeObjectURL(url);
+      getLimitedUsers.fulfilled,
+      (state, action: PayloadAction<Users>) => {
+        state.paginatedUsers = action.payload;
+        localStorage.setItem('paginatedUsers', JSON.stringify(action.payload));
+        state.loading = false;
+
       }
     );
   },

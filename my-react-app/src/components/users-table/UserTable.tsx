@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Form,
-  Popconfirm,
-  Table,
-  Typography,
-  Button,
-  TableProps,
-} from 'antd';
+import { Form, Popconfirm, Table, Typography, Button, TableProps } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@redux/store/Store';
 import {
   deleteUser,
   getAllUsers,
+  getLimitedUsers,
   updateUser,
 } from '@redux/features/UsersSlice';
 import { Container } from '@utils/Utils';
@@ -19,6 +13,8 @@ import { DeleteFilled, EditFilled } from '@ant-design/icons';
 import { EditableCell } from '@components/editableCell/EditableCell';
 import './UserTable.scss';
 import { Link } from 'react-router-dom';
+import type { PaginationProps } from 'antd';
+import { Pagination } from 'antd';
 
 interface User {
   id: string;
@@ -31,8 +27,10 @@ interface User {
 
 const UserTable: React.FC = () => {
   const [form] = Form.useForm();
-  const users = useSelector((state: RootState) => state.users.users);
-  const [data, setData] = useState(users);
+  const users =
+    useSelector((state: RootState) => state.users.paginatedUsers?.users) || [];
+  const total = useSelector((state: RootState) => state.users.paginatedUsers?.total);
+  const [data, setData] = useState<User[]>(users);
   const [editingKey, setEditingKey] = useState<string>('');
   const dispatch = useDispatch<AppDispatch>();
   const isEditing = (record: User) => record.id === editingKey;
@@ -43,7 +41,7 @@ const UserTable: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    setData(users);
+    setData(users || []);
   }, [users]);
 
   const edit = (record: Partial<User> & { id: React.Key }) => {
@@ -190,6 +188,13 @@ const UserTable: React.FC = () => {
     };
   });
 
+  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (
+    current,
+    pageSize
+  ) => {
+    dispatch(getLimitedUsers({ page: current, limit: pageSize }));
+  };
+
   return (
     <Container>
       <Form form={form} component={false}>
@@ -204,11 +209,16 @@ const UserTable: React.FC = () => {
           dataSource={data.map((item) => ({ ...item, key: item.id }))}
           columns={mergedColumns}
           rowClassName="editable-row"
-          pagination={{
-            onChange: cancel,
-          }}
+          pagination={false}
         />
       </Form>
+      <Pagination
+        showSizeChanger
+        onChange={onShowSizeChange}
+        defaultCurrent={1}
+        total={total}
+        className="table-pagination"
+      />
     </Container>
   );
 };
