@@ -1,3 +1,4 @@
+
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   ChangeUserPhotoPayload,
@@ -48,8 +49,7 @@ export const updateUser = createAsyncThunk<
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue('Failed to update user');
-  }
-});
+
 
 export const deleteUser = createAsyncThunk<
   User,
@@ -77,8 +77,10 @@ export const searchUser = createAsyncThunk<
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue('Failed to fetch users');
+
   }
 });
+
 
 export const getById = createAsyncThunk<
   User,
@@ -92,6 +94,7 @@ export const getById = createAsyncThunk<
     return thunkAPI.rejectWithValue('Failed to get user');
   }
 });
+
 
 export const getUserActivity = createAsyncThunk<
   UserActivity[],
@@ -223,6 +226,7 @@ export const userSlice = createSlice({
         state.paginatedUsers = action.payload;
         localStorage.setItem('paginatedUsers', JSON.stringify(action.payload));
         state.loading = false;
+
       }
     );
   },

@@ -10,6 +10,7 @@ import { CreateUserDto } from './dto/user.dto';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
+import * as csvWriter from 'csv-writer';
 
 @Injectable()
 export class UserService {
@@ -94,5 +95,37 @@ export class UserService {
     } catch (err) {
       return null;
     }
+  }
+
+  async exportUser(userId: number, format: 'csv' | 'json'): Promise<Buffer> {
+    const user = await this.userRepository.findOneBy({ id: userId });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    if (format === 'csv') {
+      return this.exportUserToCSV(user);
+    } else {
+      return this.exportUserToJSON(user);
+    }
+  }
+
+  private exportUserToCSV(user: User): Buffer {
+    const csv = csvWriter.createObjectCsvStringifier({
+      header: [
+        { id: 'id', title: 'ID:' },
+        { id: 'name', title: 'Name:' },
+        { id: 'email', title: 'Email:' },
+        { id: 'imageUrl', title: 'Image:' },
+      ],
+    });
+
+    const csvData = csv.getHeaderString() + csv.stringifyRecords([user]);
+    return Buffer.from(csvData);
+  }
+
+  private exportUserToJSON(user: User): Buffer {
+    return Buffer.from(JSON.stringify(user, null, 2));
   }
 }

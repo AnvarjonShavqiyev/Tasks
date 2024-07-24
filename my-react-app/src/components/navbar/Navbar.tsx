@@ -22,31 +22,31 @@ const Navbar = () => {
   }, [search]);
 
   return (
-    <div className="navbar__wrapper">
+    <div className="navbar">
       <Container>
-        <div className="navbar">
-          <div className="user-info">
-            <Avatar className="user-avatar">
+        <div className="navbar__content">
+          <div className="navbar__user-info">
+            <Avatar className="navbar__user-avatar">
               {user?.name[0].toUpperCase()}
             </Avatar>
-            <div className="user-profile">
-              <h4 className="user-name">{user?.name}</h4>
-              <Link className="profile-link" to={`/profile/${user?.id}`}>
+            <div className="navbar__user-profile">
+              <h4 className="navbar__user-name">{user?.name}</h4>
+              <Link className="navbar__profile-link" to={`/profile/${user?.id}`}>
                 Account
               </Link>
             </div>
           </div>
-          <div className="search-wrapper">
+          <div className="navbar__search-wrapper">
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="search-input"
+              className="navbar__search-input"
               type="text"
               placeholder="Search with name or email"
             />
-            <SearchOutlined className="search-icon" />
+            <SearchOutlined className="navbar__search-icon" />
           </div>
-          <button className="logout-btn" onClick={onLogOut}>
+          <button className="navbar__logout-btn" onClick={onLogOut}>
             Log Out
           </button>
         </div>

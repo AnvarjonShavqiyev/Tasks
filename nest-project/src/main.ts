@@ -11,7 +11,7 @@ async function bootstrap() {
   app.enableCors({
     origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
+    credentials: true
   });
   const activityLogService = app.get(ActivityLogService);
   const userService = app.get(UserService);
